@@ -1,40 +1,60 @@
 # task4_2
 
-**Задание 4.2 - Управление конфигурацией “для бедных”**
+**Task 4.2 - Configuration Management "for the poor".**
 
-Условие задания:
+Job condition:
 
-	Создайте bash скрипт ntp_deploy.sh, который:
-    	• устанавливает пакет с ntp сервером
-    	• Удаляет из конфигурационного файла ntp-сервера, настроенные по умолчанию (например 0.ubuntu.pool.ntp.org )
-    	• прописывает в качестве ntp-сервера ua.pool.ntp.org  
-    	• перезапускает ntp сервис
-    	• Прописывает в крон запуск скрипта ntp_verify.sh раз в 1 минуту.
-	Создайте bash скрипт ntp_verify.sh, который:
-    	• Проверяет запущен ли ntp процесс. Если процесс не запущен, запускает его
-    	• Проверяет факт изменения конфигурационного файла ntp.conf. В случае наличия изменений, выводит их в stdout. 	Возвращает конфигурационный файл в правильное состояние и перезапускает сервис NTP. Иначе говоря, конфигурационный файл должен поддерживаться в том состоянии, каким его создал ntp_deploy.sh (т.е. с ntp-сервером ua.pool.ntp.org, а не с настройками по-умолчанию).
+	Create a bash **ntp_deploy.sh** script that:
+    	• Installs a package with ntp server.
+    	• Removes default settings from the ntp server configuration file
+	  (for example, 0.ubuntu.pool.ntp.org)
+    	• Prescribes ua.pool.ntp.org as an ntp server.
+    	• Restarts ntp service.
+    	• Register the ntp_verify.sh script once a minute for cron.
+	Create a bash **ntp_verify.sh** script that:
+    	• Checks if ntp process is running. If the process is not running, it starts.
+    	• Checks the fact of changing the configuration file ntp.conf.
+	  If there are changes, output them to stdout.
+	  Returns the configuration file to the correct state and restarts the NTP service.
+	  In other words, the configuration file should be maintained in the state it was created
+	  by ntp_deploy.sh (that is, with the ua.pool.ntp.org ntp server, and not with the default settings).
     
-Дополнительные требования:
+Additional requirements:
 
-    1. Баш скрипты  с выполненными заданиями должны быть загружены в гитхаб репозитарий c названием ‘task4_2’
-    2. В гитхаб репозитарии ‘task4_2’ должно содержаться 2 скрипта  ntp_deploy.sh и ntp_verify.sh.
-    3. Во время проверки задания скрипт ntp_verify.sh может запускаться многократно.
+    1. Bash scripts with completed tasks should be uploaded to the githab repository with the name ‘task4_2’.
+    2. The githab repository ‘task4_2’ should contain 2 ntp_deploy.sh and ntp_verify.sh scripts.
+    3. During the task check, the ntp_verify.sh script can be run multiple times.
 
-Проверка результатов:
+Check results:
 
-    • Для каждого запуска будет использоваться отдельная ВМ (ОС ubuntu xenial 16.04 server, образ). Исходя из особенностей проверки и работы СRON на виртуальную машину будет предварительно установлен пакет sendmail. Скрипты будут запускаться из-под суперпользователя (root). ВМ имеет доступ в интернет.
-    • В ВМ будет склонирован репозиторий с заданием ( например https://github.com/user/task4_2, если репозиторий будет иметь другое имя, то задание будет автоматически помечено как невыполненное.
-    • Автоматически будет запущен скрипт  ‘ntp_deploy.sh’ из корневой папки репозитория (если скрипт будет называться иначе или будет находиться в подпапке - он запущен не будет, соответственно, задание будет автоматически помечено как невыполненное)
-    • В процессе проверки скрипт ntp_verify.sh может быть запущен из консоли (не дожидаясь срабатывания планировщика) и ожидается его корректное поведение.
-    • После запуска ntp_deploy.sh будет проверено состояние конфигурационного файла ntp.conf. Ожидается, что он будет отличаться от конфигурационного файла по-умолчанию только конфигурацией NTP серверов и единственным настроенным NTP сервером будет ua.pool.ntp.org
-    • Некоторое время, пока будет существовать ВМ, в конфигурационный файл ntp.conf могут вноситься самые разнообразные изменения. Ожидается, что:
-        ◦ Если изменений не обнаружено, скрипт не выводит никуда никаких сообщений и не перезапускает ntp сервис.
-        ◦ Если файл был изменен, то скрипт:
-            ▪ Выводит разницу в stdout
-            ▪ Восстанавливает состояние файла ntp.conf (т.е. Дефолт + единственный сервер  ua.pool.ntp.org)
-            ▪ Перезапускает демон ntp
-    • Проверка того, что скрипт вывел разницу между конфигурационными файлами в stdout при отработке планировщика (крон) будет чтение файла /var/mail/root
-    • Перед выводом разницы между эталонным и измененным файлом ntp.conf должна присутствовать строка “NOTICE: /etc/ntp.conf was changed. Calculated diff:”. Пример ожидаемого сообщения:
+    • For each launch, a separate VM will be used (OS ubuntu xenial 16.04 server, image).
+      Based on the features of CRON verification and operation,
+      the sendmail package will be pre-installed on the virtual machine.
+      Scripts will run from under the superuser (root). VM has access to the Internet.
+    • The VM will have a repository with a task (for example, https://github.com/user/task4_2),
+      if the repository has a different name, then the task will be automatically marked as failed.
+    • The script will run automatically ‘ntp_deploy.sh’ from the root folder of the repository
+      (if the script is named differently or is in a subfolder, it will not be launched,
+      respectively, the task will be automatically marked as failed)
+    • During the test, the ntp_verify.sh script can be launched from the console
+      (without waiting for the scheduler to work) and its correct behavior is expected.
+    • After running ntp_deploy.sh, the status of the ntp.conf configuration file will be checked.
+      It is expected that it will differ from the default configuration file only
+      by the configuration of NTP servers and the only configured NTP server will be ua.pool.ntp.org
+    • For a while, while the VM will exist, a wide variety of changes can be made to the ntp.conf configuration file.
+    
+    Expected that:
+        ◦ If no changes are detected, the script does not display any messages
+	  anywhere and does not restart the ntp service.
+        ◦ If the file has been modified, the script:
+            ▪ Displays the difference in stdout.
+            ▪ Restores the state of the ntp.conf file. (i.e. Default + single server ua.pool.ntp.org)
+            ▪ Restarts the ntp daemon.
+    • Checking that the script displayed the difference between the configuration files
+      in stdout when processing the scheduler (cron) will read the file /var/mail/root
+    • Before outputting the difference between the reference and modified ntp.conf file,
+      the line “NOTICE: /etc/ntp.conf was changed. Calculated diff: ”.
+      Sample expected message:
 
 	NOTICE: /etc/ntp.conf was changed. Calculated diff:
 		--- /etc/ntp.conf.bak   2018-03-27 16:45:40.693954805 +0000
@@ -42,5 +62,9 @@
 		@@ -20 +20 @@
 		-pool ua.pool.ntp.org
 		+pool us.pool.ntp.org
-    • Изменения в конфигурационном файле должны выводиться в “unified format”
-    • В процессе существования ВМ после запуска скрипта ntp_deploy.sh демон ntp может быть остановлен. Ожидается, что после срабатывания скрипта ntp_verify.sh (либо через крон, либо при запуске вручную) скрипт выведет в stdout сообщение “NOTICE: ntp is not running” и запустит сервис ntp.
+    • Changes in the configuration file should be displayed in “unified format”.
+    • During the existence of the VM after running the ntp_deploy.sh script,
+      the ntp daemon can be stopped. It is expected that after the ntp_verify.sh
+      script is triggered (either via cron or manually started),
+      the script will output the message
+      “NOTICE: ntp is not running” to stdout and start the ntp service.
