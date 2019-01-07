@@ -4,14 +4,14 @@
 
 Job condition:
 
-	Create a bash **ntp_deploy.sh** script that:
+	Create a bash ntp_deploy.sh script that:
     	• Installs a package with ntp server.
     	• Removes default settings from the ntp server configuration file
 	  (for example, 0.ubuntu.pool.ntp.org)
     	• Prescribes ua.pool.ntp.org as an ntp server.
     	• Restarts ntp service.
     	• Register the ntp_verify.sh script once a minute for cron.
-	Create a bash **ntp_verify.sh** script that:
+	Create a bash ntp_verify.sh script that:
     	• Checks if ntp process is running. If the process is not running, it starts.
     	• Checks the fact of changing the configuration file ntp.conf.
 	  If there are changes, output them to stdout.
